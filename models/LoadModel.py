@@ -28,7 +28,7 @@ class MainModel(nn.Module):
             else:
                 self.model = pretrainedmodels.__dict__[self.backbone_arch](num_classes=1000)
 
-        if self.backbone_arch == 'resnet50' or self.backbone_arch == 'se_resnet50':
+        if self.backbone_arch in ['resnet34', 'resnet50', 'se_resnet50']:
             self.model = nn.Sequential(*list(self.model.children())[:-2])
         if self.backbone_arch == 'senet154':
             self.model = nn.Sequential(*list(self.model.children())[:-3])

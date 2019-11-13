@@ -23,7 +23,7 @@ from utils.dataset_DCL import collate_fn4train, collate_fn4val, collate_fn4test,
 import pdb
 
 os.environ['CUDA_DEVICE_ORDRE'] = 'PCI_BUS_ID'
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 # parameters setting
 def parse_args():
@@ -62,9 +62,9 @@ def parse_args():
     parser.add_argument('--detail', dest='discribe',
                         default='', type=str)
     parser.add_argument('--size', dest='resize_resolution',
-                        default=512, type=int)
+                        default=[512, 512], nargs=2, type=int)
     parser.add_argument('--crop', dest='crop_resolution',
-                        default=448, type=int)
+                        default=[448, 448], nargs=2, type=int)
     parser.add_argument('--cls_2', dest='cls_2',
                         action='store_true')
     parser.add_argument('--cls_mul', dest='cls_mul',

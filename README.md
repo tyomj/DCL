@@ -125,6 +125,18 @@ For training FGVC datasets from trained checkpoint
 ```
 To achieve the similar results of paper, please use the default parameter settings.
 
+
+For custom  datasets from scratch
+
+```shell
+ python train.py --data custom --epoch 360 --backbone resnet34 \
+                    --tb 16 --tnw 16 --vb 512 --vnw 16 \
+                    --lr 0.0008 --lr_step 60 \
+                    --cls_lr_ratio 10 --start_epoch 0 \
+                    --detail training_descibe4checkpoint --size 384 160 \
+                    --crop 320 128 --cls_mul --swap_num 8 8
+```
+
 ## Citation
 Please cite our CVPR19 paper if you use DCL in your work:
 ```

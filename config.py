@@ -6,10 +6,10 @@ from transforms import transforms
 from utils.autoaugment import ImageNetPolicy
 
 # pretrained model checkpoints
-pretrained_model = {'resnet50' : './models/pretrained/resnet50-19c8e357.pth',}
+pretrained_model = {'resnet34' : './models/pretrained/resnet34-333f7ec4.pth',}  #  {'resnet50' : './models/pretrained/resnet50-19c8e357.pth',}
 
 # transforms dict
-def load_data_transformers(resize_reso=512, crop_reso=448, swap_num=[7, 7]):
+def load_data_transformers(resize_reso=[512, 512], crop_reso=[448, 448], swap_num=[7, 7]):
     center_resize = 600
     Normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     data_transforms = {
@@ -17,25 +17,24 @@ def load_data_transformers(resize_reso=512, crop_reso=448, swap_num=[7, 7]):
             transforms.Randomswap((swap_num[0], swap_num[1])),
         ]),
         'common_aug': transforms.Compose([
-            transforms.Resize((resize_reso, resize_reso)),
+            transforms.Resize((resize_reso[0], resize_reso[1])),
             transforms.RandomRotation(degrees=15),
-            transforms.RandomCrop((crop_reso,crop_reso)),
-            transforms.RandomHorizontalFlip(),
+            transforms.RandomCrop((crop_reso[0],crop_reso[1])), #transforms.RandomHorizontalFlip(),
         ]),
         'train_totensor': transforms.Compose([
-            transforms.Resize((crop_reso, crop_reso)),
+            transforms.Resize((crop_reso[0], crop_reso[1])),
             # ImageNetPolicy(),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
         ]),
         'val_totensor': transforms.Compose([
-            transforms.Resize((crop_reso, crop_reso)),
+            transforms.Resize((crop_reso[0], crop_reso[1])),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
         ]),
         'test_totensor': transforms.Compose([
-            transforms.Resize((resize_reso, resize_reso)),
-            transforms.CenterCrop((crop_reso, crop_reso)),
+            transforms.Resize((resize_reso[0], resize_reso[1])),
+            transforms.CenterCrop((crop_reso[0], crop_reso[1])),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
         ]),
@@ -82,6 +81,11 @@ class LoadConfig(object):
             self.rawdata_root = './dataset/aircraft/data'
             self.anno_root = './dataset/aircraft/anno'
             self.numcls = 100
+        elif args.dataset == 'custom':
+            self.dataset = args.dataset
+            self.rawdata_root = ''
+            self.anno_root = '/home/artem-nb/Datasets/coco_alcohol/annotations'
+            self.numcls = 1643
         else:
             raise Exception('dataset not defined ???')
 
