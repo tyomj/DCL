@@ -85,7 +85,7 @@ class LoadConfig(object):
             self.dataset = args.dataset
             self.rawdata_root = ''
             self.anno_root = '/home/artem-nb/Datasets/coco_alcohol/annotations'
-            self.numcls = 1643
+            self.numcls = 1660
         else:
             raise Exception('dataset not defined ???')
 

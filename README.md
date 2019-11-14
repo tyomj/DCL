@@ -129,12 +129,7 @@ To achieve the similar results of paper, please use the default parameter settin
 For custom  datasets from scratch
 
 ```shell
- python train.py --data custom --epoch 360 --backbone resnet34 \
-                    --tb 16 --tnw 16 --vb 512 --vnw 16 \
-                    --lr 0.0008 --lr_step 60 \
-                    --cls_lr_ratio 10 --start_epoch 0 \
-                    --detail training_descibe4checkpoint --size 384 160 \
-                    --crop 320 128 --cls_mul --swap_num 8 8
+python3 train.py --data custom --epoch 360 --backbone resnet34 --tb 128 --tnw 4 --vb 128 --vnw 4 --lr 0.005 --lr_step 60 --cls_lr_ratio 10 --start_epoch 0 --detail training_descibe4checkpoint --size 256 256 --crop 224 224 --cls_mul --swap_num 4 4 --sp 3608 --cp 3608
 ```
 
 ## Citation

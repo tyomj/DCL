@@ -37,18 +37,18 @@ class MainModel(nn.Module):
         if self.backbone_arch == 'se_resnet101':
             self.model = nn.Sequential(*list(self.model.children())[:-2])
         self.avgpool = nn.AdaptiveAvgPool2d(output_size=1)
-        self.classifier = nn.Linear(2048, self.num_classes, bias=False)
+        self.classifier = nn.Linear(512, self.num_classes, bias=False)
 
         if self.use_dcl:
             if config.cls_2:
-                self.classifier_swap = nn.Linear(2048, 2, bias=False)
+                self.classifier_swap = nn.Linear(512, 2, bias=False)
             if config.cls_2xmul:
-                self.classifier_swap = nn.Linear(2048, 2*self.num_classes, bias=False)
-            self.Convmask = nn.Conv2d(2048, 1, 1, stride=1, padding=0, bias=True)
-            self.avgpool2 = nn.AvgPool2d(2, stride=2)
+                self.classifier_swap = nn.Linear(512, 2*self.num_classes, bias=False)
+            self.Convmask = nn.Conv2d(512, 1, 1, stride=1, padding=0, bias=True)
+            self.avgpool2 = nn.AvgPool2d(1, stride=1)
 
         if self.use_Asoftmax:
-            self.Aclassifier = AngleLinear(2048, self.num_classes, bias=False)
+            self.Aclassifier = AngleLinear(512, self.num_classes, bias=False)
 
     def forward(self, x, last_cont=None):
         x = self.model(x)
