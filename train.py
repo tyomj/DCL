@@ -1,4 +1,6 @@
 #coding=utf-8
+import sys
+sys.path.append('/home/artem-nb/Projects/DCL')
 import os
 import datetime
 import argparse
@@ -187,6 +189,10 @@ if __name__ == '__main__':
     model.cuda()
     model = nn.DataParallel(model)
 
+    
+
+        
+        
     # optimizer prepare
     if Config.use_backbone:
         ignored_params = list(map(id, model.module.classifier.parameters()))
