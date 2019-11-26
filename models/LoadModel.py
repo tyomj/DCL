@@ -29,10 +29,10 @@ class MainModel(nn.Module):
                 self.model = pretrainedmodels.__dict__[self.backbone_arch](num_classes=1000)
 
         if self.backbone_arch in ['resnet34', 'resnet50', 'se_resnet50']:
-            #self.model = nn.Sequential(*list(self.model.children())[:-2])
-            self.model.avgpool = nn.Sequential()
-            self.model.fc = nn.Sequential()
-            self.model.last_linear = nn.Sequential()
+            self.model = nn.Sequential(*list(self.model.children())[:-2])
+            #self.model.avgpool = nn.Sequential()
+            #self.model.fc =  nn.Sequential()
+            #self.model.last_linear =  nn.Sequential()
         if self.backbone_arch == 'senet154':
             self.model = nn.Sequential(*list(self.model.children())[:-3])
         if self.backbone_arch == 'se_resnext101_32x4d':

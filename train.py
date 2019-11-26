@@ -190,8 +190,18 @@ if __name__ == '__main__':
     model = nn.DataParallel(model)
 
     
-
-        
+    layer0_param = list(map(id, model.module.model[0].parameters()))
+    layer0_param += list(map(id, model.module.model[1].parameters()))
+    layer1_param = list(map(id, model.module.model[4].parameters()))
+    layer2_param = list(map(id, model.module.model[5].parameters()))
+    layer3_param = list(map(id, model.module.model[6].parameters()))
+    layer4_param = list(map(id, model.module.model[7].parameters()))
+    
+    layer0_coef = 1e-3
+    layer1_coef = 1e-2
+    layer2_coef = 1e-2
+    layer3_coef = 1e-1
+    layer4_coef = 1e-1
         
     # optimizer prepare
     if Config.use_backbone:
@@ -201,7 +211,7 @@ if __name__ == '__main__':
         ignored_params2 = list(map(id, model.module.classifier_swap.parameters()))
         ignored_params3 = list(map(id, model.module.Convmask.parameters()))
 
-        ignored_params = ignored_params1 + ignored_params2 + ignored_params3
+        ignored_params = ignored_params1 + ignored_params2 + ignored_params3 + layer0_param + layer1_param + layer2_param + layer3_param + layer4_param 
     print('the num of new layers:', len(ignored_params), flush=True)
     base_params = filter(lambda p: id(p) not in ignored_params, model.module.parameters())
 
@@ -212,11 +222,16 @@ if __name__ == '__main__':
                                {'params': model.module.classifier.parameters(), 'lr': base_lr}], lr = base_lr, momentum=0.9)
     else:
         optimizer = optim.SGD([{'params': base_params},
+                               {'params': model.module.model[0].parameters(), 'lr': base_lr * layer0_coef},
+                               {'params': model.module.model[1].parameters(), 'lr': base_lr * layer0_coef},
+                               {'params': model.module.model[4].parameters(), 'lr': base_lr * layer1_coef},
+                               {'params': model.module.model[5].parameters(), 'lr': base_lr * layer2_coef},
+                               {'params': model.module.model[6].parameters(), 'lr': base_lr * layer3_coef},
+                               {'params': model.module.model[7].parameters(), 'lr': base_lr * layer4_coef},
                                {'params': model.module.classifier.parameters(), 'lr': lr_ratio*base_lr},
                                {'params': model.module.classifier_swap.parameters(), 'lr': lr_ratio*base_lr},
                                {'params': model.module.Convmask.parameters(), 'lr': lr_ratio*base_lr},
-                              ], lr = base_lr, momentum=0.9)
-
+                              ], lr = base_lr, momentum=0.9, weight_decay=1e-4)
 
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=args.decay_step, gamma=0.1)
 
